@@ -8,6 +8,7 @@ from sqlalchemy.engine import Engine
 
 import apis.bluesky as bluesky
 import apis.linkedin as linkedin
+import apis.facebook as facebook
 import apis.instagram as instagram
 import apis.mastodon as mastodon
 import apis.rss as rss
@@ -21,6 +22,7 @@ from config import (
     NETWORK_BLUESKY,
     NETWORK_INSTAGRAM,
     NETWORK_LINKEDIN,
+    NETWORK_FACEBOOK,
     NETWORK_MASTODON,
     NETWORK_RSS,
     NETWORK_TELEGRAM,
@@ -29,6 +31,7 @@ from config import (
     POST_MIN_AGE_MINUTES,
     REPLY_FILTER_NETWORKS,
     SOURCE_ONLY_NETWORKS,
+    DESTINATION_ONLY_NETWORKS,
     WATCH_INITIAL_LOOKBACK_HOURS,
     TWITTER_FETCH_MAX_PAGES,
     WATCH_OVERLAP_HOURS,
@@ -62,6 +65,7 @@ _NETWORKS: dict[str, ModuleType] = {
     NETWORK_RSS: rss,
     NETWORK_INSTAGRAM: instagram,
     NETWORK_LINKEDIN: linkedin,
+    NETWORK_FACEBOOK: facebook,
 }
 
 
@@ -411,6 +415,8 @@ async def run_sync(
 
     total = 0
     for source in accounts:
+        if source.network in DESTINATION_ONLY_NETWORKS:
+            continue
         source_name = account_display_name(source, engine)
         try:
             total += await sync_account(

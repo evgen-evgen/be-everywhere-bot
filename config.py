@@ -28,6 +28,7 @@ NETWORK_BLUESKY = "bluesky"
 NETWORK_RSS = "rss"
 NETWORK_INSTAGRAM = "instagram"
 NETWORK_LINKEDIN = "linkedin"
+NETWORK_FACEBOOK = "facebook"
 
 NETWORKS: list[str] = [
     NETWORK_TWITTER,
@@ -38,7 +39,11 @@ NETWORKS: list[str] = [
     NETWORK_RSS,
     NETWORK_INSTAGRAM,
     NETWORK_LINKEDIN,
+    NETWORK_FACEBOOK,
 ]
+
+# Publish-only destinations. They receive mesh posts but are not polled as sources.
+DESTINATION_ONLY_NETWORKS: frozenset[str] = frozenset({NETWORK_FACEBOOK})
 
 # Read-only sources — mesh sync publishes from these but never to them.
 SOURCE_ONLY_NETWORKS: frozenset[str] = frozenset({NETWORK_RSS, NETWORK_INSTAGRAM})
@@ -92,12 +97,18 @@ class LinkedInAppConfig:
     api_version: str = "202504"
 
 
+@dataclass(frozen=True)
+class FacebookAppConfig:
+    api_base_url: str = "https://graph.facebook.com/v24.0"
+
+
 TWITTER_APP = TwitterAppConfig()
 TELEGRAM_APP = TelegramAppConfig()
 THREADS_APP = ThreadsAppConfig()
 BLUESKY_APP = BlueskyAppConfig()
 INSTAGRAM_APP = InstagramAppConfig()
 LINKEDIN_APP = LinkedInAppConfig()
+FACEBOOK_APP = FacebookAppConfig()
 
 TELEGRAM_LIMITS = NetworkLimits(max_text=4096, max_caption=1024, max_media_group=4)
 MASTODON_LIMITS = NetworkLimits(
@@ -118,6 +129,12 @@ LINKEDIN_LIMITS = NetworkLimits(
     max_media_group=20,
     allows_mixed_media=False,
 )
+FACEBOOK_LIMITS = NetworkLimits(
+    max_text=63206,
+    max_caption=63206,
+    max_media_group=10,
+    allows_mixed_media=False,
+)
 
 NETWORK_LIMITS: dict[str, NetworkLimits] = {
     NETWORK_TELEGRAM: TELEGRAM_LIMITS,
@@ -126,6 +143,7 @@ NETWORK_LIMITS: dict[str, NetworkLimits] = {
     NETWORK_THREADS: THREADS_LIMITS,
     NETWORK_BLUESKY: BLUESKY_LIMITS,
     NETWORK_LINKEDIN: LINKEDIN_LIMITS,
+    NETWORK_FACEBOOK: FACEBOOK_LIMITS,
 }
 
 TWITTER_CREDENTIAL_KEYS = ("bearer_token", "user_id", "username")
@@ -136,3 +154,4 @@ BLUESKY_CREDENTIAL_KEYS = ("handle", "did", "access_jwt", "refresh_jwt", "pds_ur
 RSS_CREDENTIAL_KEYS = ("feed_url",)
 INSTAGRAM_CREDENTIAL_KEYS = ("access_token", "user_id", "username")
 LINKEDIN_CREDENTIAL_KEYS = ("access_token", "person_urn", "display_name")
+FACEBOOK_CREDENTIAL_KEYS = ("page_access_token", "page_id", "page_name")

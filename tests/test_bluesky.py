@@ -17,6 +17,7 @@ from config import (
     NETWORK_BLUESKY,
     NETWORK_LIMITS,
     NETWORK_LINKEDIN,
+    NETWORK_FACEBOOK,
     NETWORK_MASTODON,
     NETWORK_THREADS,
 )
@@ -131,6 +132,7 @@ def test_networks_that_disallow_mixed_media():
         NETWORK_MASTODON,
         NETWORK_THREADS,
         NETWORK_LINKEDIN,
+        NETWORK_FACEBOOK,
     }
     for network, limits in NETWORK_LIMITS.items():
         if network in disallow:

@@ -8,6 +8,7 @@ from config import (
     NETWORK_BLUESKY,
     NETWORK_INSTAGRAM,
     NETWORK_LINKEDIN,
+    NETWORK_FACEBOOK,
     NETWORK_MASTODON,
     NETWORK_RSS,
     NETWORK_TELEGRAM,
@@ -180,4 +181,8 @@ def account_display_name(account: Account, engine: Engine) -> str:
         display_name = creds.get("display_name")
         if display_name:
             return display_name
+    if account.network == NETWORK_FACEBOOK:
+        page_name = creds.get("page_name")
+        if page_name:
+            return page_name
     return f"{account.network}:{account.label}"

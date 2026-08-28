@@ -3,6 +3,8 @@ from apis.types import MediaItem, OutboundPost, Post
 from config import (
     NETWORK_INSTAGRAM,
     NETWORK_LINKEDIN,
+    NETWORK_FACEBOOK,
+    DESTINATION_ONLY_NETWORKS,
     NETWORK_RSS,
     NETWORK_TWITTER,
     SOURCE_ONLY_NETWORKS,
@@ -21,6 +23,7 @@ def test_source_only_networks():
     assert NETWORK_INSTAGRAM in SOURCE_ONLY_NETWORKS
     assert NETWORK_TWITTER not in SOURCE_ONLY_NETWORKS
     assert NETWORK_LINKEDIN not in SOURCE_ONLY_NETWORKS
+    assert NETWORK_FACEBOOK in DESTINATION_ONLY_NETWORKS
 
 
 def test_group_by_conversation(post_factory, utc_now):
@@ -52,10 +55,11 @@ def test_destination_accounts_excludes_self_and_source_only(post_factory):
     rss = Account(id=3, network=NETWORK_RSS, label="blog", remote_id="3")
     instagram = Account(id=4, network=NETWORK_INSTAGRAM, label="main", remote_id="4")
     linkedin = Account(id=5, network=NETWORK_LINKEDIN, label="main", remote_id="5")
+    facebook = Account(id=6, network=NETWORK_FACEBOOK, label="main", remote_id="6")
     result = _destination_accounts(
-        source, [source, dest, rss, instagram, linkedin]
+        source, [source, dest, rss, instagram, linkedin, facebook]
     )
-    assert result == [dest, linkedin]
+    assert result == [dest, linkedin, facebook]
 
 
 def test_slice_media_bytes():

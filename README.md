@@ -1,6 +1,6 @@
 # be-everywhere-bot
 
-A small Python app that **mesh-syncs** your posts across **X (Twitter)**, **Threads**, **Bluesky**, **Telegram**, **Mastodon**, **Instagram**, **LinkedIn**, and **RSS feeds**. When a new post appears on any connected account, it is reposted to every other account. The bot tracks what was already synced so nothing is duplicated — including posts it created itself (so a Twitter thread reposted to Telegram is never echoed back to Twitter).
+A small Python app that **mesh-syncs** your posts across **X (Twitter)**, **Threads**, **Bluesky**, **Telegram**, **Mastodon**, **Instagram**, **LinkedIn**, **Facebook Pages**, and **RSS feeds**. When a new post appears on any connected account, it is reposted to every other account. The bot tracks what was already synced so nothing is duplicated — including posts it created itself (so a Twitter thread reposted to Telegram is never echoed back to Twitter).
 
 ## Features
 
@@ -34,6 +34,7 @@ uv run python main.py --auth=bluesky
 uv run python main.py --auth=rss
 uv run python main.py --auth=instagram
 uv run python main.py --auth=linkedin
+uv run python main.py --auth=facebook
 
 # Run continuous mesh sync
 uv run python main.py
@@ -53,6 +54,7 @@ uv run python main.py --auth=bluesky --label=main
 uv run python main.py --auth=rss --label=blog
 uv run python main.py --auth=instagram --label=main
 uv run python main.py --auth=linkedin --label=main
+uv run python main.py --auth=facebook --label=main
 ```
 
 Re-running `--auth` with the same network + label updates credentials.
@@ -210,6 +212,21 @@ Use `--label` to connect multiple accounts on the same network (e.g. personal an
 
 ---
 
+### Facebook Page
+
+Portal: [Meta for Developers](https://developers.facebook.com/)
+
+What you need: a Facebook Page, its numeric Page ID, and a Page Access Token with `pages_manage_posts` (normally also `pages_show_list` and `pages_read_engagement` while obtaining the token).
+
+1. Create or open a Meta app and connect Facebook Login.
+2. Generate a User Access Token with the required Page permissions.
+3. Obtain the Page Access Token (for example via `GET /me/accounts`).
+4. Run `uv run python main.py --auth=facebook --label=main` and paste the Page token and ID.
+
+**Notes:** Facebook integration publishes to Pages, not personal profiles. It is a destination only: Telegram and other configured sources are copied to it. Text, photo albums, and a single video per outbound post are supported.
+
+---
+
 ## Running
 
 ```bash
@@ -262,6 +279,7 @@ docker compose run --rm bot uv run python main.py --auth=bluesky
 docker compose run --rm bot uv run python main.py --auth=rss
 docker compose run --rm bot uv run python main.py --auth=instagram
 docker compose run --rm bot uv run python main.py --auth=linkedin
+docker compose run --rm bot uv run python main.py --auth=facebook
 docker compose up -d
 ```
 

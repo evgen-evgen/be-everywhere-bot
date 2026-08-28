@@ -9,6 +9,7 @@ from croniter import croniter
 
 import apis.bluesky as bluesky_api
 import apis.linkedin as linkedin_api
+import apis.facebook as facebook_api
 import apis.instagram as instagram_api
 import apis.mastodon as mastodon_api
 import apis.rss as rss_api
@@ -50,6 +51,7 @@ telegram:
 {rss_api.AUTH_HELP}
 {instagram_api.AUTH_HELP}
 {linkedin_api.AUTH_HELP}
+{facebook_api.AUTH_HELP}
 """,
     )
     parser.add_argument(
@@ -59,7 +61,7 @@ telegram:
     )
     parser.add_argument(
         "--auth",
-        choices=["twitter", "telegram", "mastodon", "threads", "bluesky", "rss", "instagram", "linkedin"],
+        choices=["twitter", "telegram", "mastodon", "threads", "bluesky", "rss", "instagram", "linkedin", "facebook"],
         metavar="NETWORK",
         help="Configure a network account and store credentials in SQLite.",
     )
@@ -177,6 +179,9 @@ async def async_main(args: argparse.Namespace) -> None:
         return
     if args.auth == "linkedin":
         await linkedin_api.authenticate(engine, label=args.label)
+        return
+    if args.auth == "facebook":
+        await facebook_api.authenticate(engine, label=args.label)
         return
 
     if args.since:
